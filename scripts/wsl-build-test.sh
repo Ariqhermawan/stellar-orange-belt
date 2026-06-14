@@ -6,7 +6,8 @@ export PATH="$HOME/.cargo/bin:$PATH"
 # Work around a rustc 1.95 ICE in the incremental lint pass.
 export CARGO_INCREMENTAL=0
 
-SRC="/mnt/c/Users/Lenovo/OneDrive/Documents/Claude/Projects/stellar-orange-belt/contracts"
+# Source contracts dir. Override with SRC=... or run from the repo root.
+SRC="${SRC:-$PWD/contracts}"
 WORK="$HOME/orange-build"
 rm -rf "$WORK"; mkdir -p "$WORK"
 cp -r "$SRC/." "$WORK/"

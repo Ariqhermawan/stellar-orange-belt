@@ -6,7 +6,8 @@ if [ -f "$HOME/.cargo/env" ]; then . "$HOME/.cargo/env"; fi
 export PATH="$HOME/.cargo/bin:$PATH"
 export CARGO_INCREMENTAL=0
 
-SRC="/mnt/c/Users/Lenovo/OneDrive/Documents/Claude/Projects/stellar-orange-belt/contracts"
+# Source contracts dir. Override with SRC=... or run from the repo root.
+SRC="${SRC:-$PWD/contracts}"
 WORK="$HOME/orange-build"
 rm -rf "$WORK"; mkdir -p "$WORK"; cp -r "$SRC/." "$WORK/"
 cd "$WORK"

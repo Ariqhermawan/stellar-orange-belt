@@ -143,8 +143,10 @@ CI runs both suites plus a typecheck and production build on every push and PR
 
 ---
 
-## Notes
+## Security & known limitations
 
 This is a **testnet** demo. The `PLEDGE` token has a permissionless faucet and no
 real value. Wallet signing, sending, and any fund movement are always performed
-by the user in their own wallet.
+by the user in their own wallet. Deliberate demo tradeoffs (permissionless faucet,
+single-admin mint, instance-storage contributor ceiling) and the contract safety
+review are documented in [SECURITY.md](SECURITY.md).

@@ -126,6 +126,7 @@ export default function App() {
   };
 
   const handleDisconnect = async () => {
+    if (tx.kind === "pending") return; // don't disconnect mid-transaction
     try {
       await disconnectWallet();
     } catch {
@@ -152,11 +153,12 @@ export default function App() {
   const onStage = (stage: WriteStage) => setTx({ kind: "pending", msg: STAGE[stage] });
 
   const runWrite = async (label: string, fn: () => Promise<string>) => {
+    const addr = address; // pin the signer for the post-write refresh
     setTx({ kind: "pending", msg: `${label}…` });
     try {
       const hash = await fn();
       setTx({ kind: "success", msg: `${label} confirmed.`, hash });
-      await refreshAll(address);
+      await refreshAll(addr);
     } catch (err) {
       setTx({ kind: "error", msg: describeError(err) });
     }
@@ -274,7 +276,7 @@ export default function App() {
             <section className="card">
               <div className="row between">
                 <h2>Account</h2>
-                <button className="btn ghost sm" onClick={handleDisconnect}>
+                <button className="btn ghost sm" onClick={handleDisconnect} disabled={busy}>
                   Disconnect
                 </button>
               </div>

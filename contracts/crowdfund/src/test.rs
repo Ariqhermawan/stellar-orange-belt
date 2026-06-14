@@ -93,3 +93,46 @@ fn claim_before_deadline_panics() {
     t.cf.contribute(&t.backer1, &1_000);
     t.cf.claim(); // still before deadline
 }
+
+#[test]
+#[should_panic(expected = "campaign ended")]
+fn contribute_after_deadline_panics() {
+    let t = setup();
+    t.env.ledger().with_mut(|li| li.timestamp = DEADLINE + 1);
+    t.cf.contribute(&t.backer1, &100);
+}
+
+#[test]
+#[should_panic(expected = "goal not met")]
+fn claim_without_meeting_goal_panics() {
+    let t = setup();
+    t.cf.contribute(&t.backer1, &300); // below goal
+    t.env.ledger().with_mut(|li| li.timestamp = DEADLINE + 1);
+    t.cf.claim();
+}
+
+#[test]
+#[should_panic(expected = "already claimed")]
+fn double_claim_panics() {
+    let t = setup();
+    t.cf.contribute(&t.backer1, &1_000); // meets goal
+    t.env.ledger().with_mut(|li| li.timestamp = DEADLINE + 1);
+    t.cf.claim();
+    t.cf.claim(); // second claim panics
+}
+
+#[test]
+#[should_panic(expected = "goal met, no refund")]
+fn refund_after_goal_met_panics() {
+    let t = setup();
+    t.cf.contribute(&t.backer1, &1_000); // meets goal
+    t.env.ledger().with_mut(|li| li.timestamp = DEADLINE + 1);
+    t.cf.refund(&t.backer1); // not allowed: goal was met
+}
+
+#[test]
+#[should_panic(expected = "already initialized")]
+fn reinitialize_panics() {
+    let t = setup();
+    t.cf.initialize(&t.recipient, &t.token.address, &GOAL, &DEADLINE);
+}

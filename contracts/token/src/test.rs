@@ -63,3 +63,24 @@ fn transfer_insufficient_panics() {
     token.faucet(&a); // 1_000
     token.transfer(&a, &b, &2_000); // panics
 }
+
+#[test]
+#[should_panic(expected = "already initialized")]
+fn reinitialize_panics() {
+    let e = Env::default();
+    e.mock_all_auths();
+    let admin = Address::generate(&e);
+    let token = TokenClient::new(&e, &e.register(Token, ()));
+    token.initialize(
+        &admin,
+        &0u32,
+        &String::from_str(&e, "Pledge"),
+        &String::from_str(&e, "PLG"),
+    );
+    token.initialize(
+        &admin,
+        &0u32,
+        &String::from_str(&e, "Pledge"),
+        &String::from_str(&e, "PLG"),
+    );
+}

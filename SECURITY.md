@@ -61,6 +61,30 @@ reachable in this read-only testnet browser flow (the RPC URL is hardcoded, key
 material is handled only by the user's wallet extension). They are inherent to the
 current Stellar SDK ecosystem; pin/upgrade once upstream ships fixed releases.
 
+## Deployment and initialization
+
+The contracts use an explicit `initialize` function rather than a Soroban
+constructor. On a fresh deploy there is, in principle, a brief window in which
+another party could call `initialize` before the deployer does. The deployed
+testnet instances referenced in the README were initialized by the deployer
+immediately after deploy, so this does not affect them. A production deployment
+should use a Soroban constructor so deploy and initialize happen atomically in a
+single transaction, removing the window entirely.
+
+## Storage TTL
+
+Persistent entries (token balances, campaign and pledge state) are not currently
+bumped with `extend_ttl`. For a short-lived testnet demo this is fine, but a
+long-running or production deployment should call `extend_ttl` on these entries
+so dormant state does not expire.
+
+## Token amounts
+
+The PLEDGE token uses 0 decimals and small whole-number amounts, so the frontend
+represents amounts as JS numbers. This is well within `Number.MAX_SAFE_INTEGER`
+for the demo. A token with 7 decimals (stroops) or large balances should carry
+amounts as bigint or decimal strings end to end.
+
 ## Reporting
 
 This is a learning project. For issues, open a GitHub issue on the repository.

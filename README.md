@@ -26,7 +26,7 @@ refund on failure).
 - **Refund** — if the deadline passes without meeting the goal, contributors
   reclaim their pledge.
 - **Live state** — funding progress, status, time-left, balances, and a recent
-  on-chain events feed, each linking to stellar.expert.
+  token + crowdfund events feed, each linking to stellar.expert.
 
 ---
 
@@ -123,6 +123,7 @@ cargo test --workspace                                   # unit tests (host)
 cargo build --workspace --target wasm32v1-none --release # wasm
 
 # convenience scripts (run from WSL):
+cd ..
 bash scripts/wsl-build-test.sh        # copy → test → build
 bash scripts/wsl-deploy.sh            # deploy + initialize both contracts
 bash scripts/wsl-seed-contribution.sh # faucet + one cross-contract contribute
@@ -150,3 +151,7 @@ real value. Wallet signing, sending, and any fund movement are always performed
 by the user in their own wallet. Deliberate demo tradeoffs (permissionless faucet,
 single-admin mint, instance-storage contributor ceiling) and the contract safety
 review are documented in [SECURITY.md](SECURITY.md).
+
+## Submission checklist
+
+See [`SUBMISSION.md`](SUBMISSION.md) for the reviewer-facing summary, live demo, contract IDs, cross-contract proof, and run commands.

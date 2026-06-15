@@ -393,8 +393,9 @@ export default function App() {
             ) : (
               <ul className="events">
                 {events.map((ev) => (
-                  <li key={ev.id} className="event">
+                  <li key={`${ev.source}-${ev.id}`} className="event">
                     <span className={`tag tag-${ev.topic}`}>{ev.topic}</span>
+                    <span className={`event-source source-${ev.source}`}>{ev.source}</span>
                     <span className="event-val">{ev.amount.toLocaleString("en-US")} PLG</span>
                     <a
                       className="link sm"

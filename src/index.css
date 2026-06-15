@@ -362,6 +362,12 @@ input:focus {
   color: var(--accent);
   background: rgba(246, 134, 58, 0.14);
 }
+.tag-transfer,
+.tag-faucet,
+.tag-mint {
+  color: var(--info);
+  background: rgba(109, 139, 255, 0.14);
+}
 .tag-goalmet {
   color: var(--ok);
   background: rgba(52, 211, 154, 0.14);
@@ -378,6 +384,18 @@ input:focus {
   flex: 1;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+}
+.event-source {
+  color: var(--muted);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.source-token {
+  color: #aebcff;
+}
+.source-crowdfund {
+  color: #ffc48a;
 }
 
 /* Alerts */

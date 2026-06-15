@@ -186,27 +186,35 @@ export type CrowdfundEvent = {
   id: string;
   ledger: number;
   txHash: string;
+  source: "token" | "crowdfund";
   topic: string;
   amount: number;
 };
 
-/** Recent events emitted by the crowdfund contract (newest first). */
+const TOKEN_TOPICS = new Set(["faucet", "mint", "transfer"]);
+
+/** Recent events emitted by the token and crowdfund contracts (newest first). */
 export async function getRecentEvents(limit = 12): Promise<CrowdfundEvent[]> {
   const latest = await server.getLatestLedger();
   const startLedger = Math.max(latest.sequence - 2000, 1);
   const res = await server.getEvents({
     startLedger,
-    filters: [{ type: "contract", contractIds: [CROWDFUND_ID] }],
+    filters: [{ type: "contract", contractIds: [TOKEN_ID, CROWDFUND_ID] }],
     limit,
   });
   return res.events
-    .map((e) => ({
-      id: e.id,
-      ledger: e.ledger,
-      txHash: e.txHash,
-      topic: e.topic[0] ? String(scValToNative(e.topic[0])) : "event",
-      amount: Number(scValToNative(e.value)),
-    }))
+    .map((e) => {
+      const topic = e.topic[0] ? String(scValToNative(e.topic[0])) : "event";
+      const source: CrowdfundEvent["source"] = TOKEN_TOPICS.has(topic) ? "token" : "crowdfund";
+      return {
+        id: e.id,
+        ledger: e.ledger,
+        txHash: e.txHash,
+        source,
+        topic,
+        amount: Number(scValToNative(e.value)),
+      };
+    })
     .reverse();
 }
 

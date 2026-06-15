@@ -39,5 +39,5 @@ echo "TX_URL=$(grep -oE 'https://stellar\.expert[^ ]*tx/[a-f0-9]{64}' /tmp/contr
 echo "TX_HASH=$(grep -oiE '[a-f0-9]{64}' /tmp/contrib.log | head -1)"
 
 echo "== raised after =="
-stellar contract invoke --id "$CF_ID" --source-account ybcounter --network testnet -- \
+stellar contract invoke --id "$CF_ID" --source-account "$KEY" --network testnet -- \
   get_raised 2>&1 | tail -1
